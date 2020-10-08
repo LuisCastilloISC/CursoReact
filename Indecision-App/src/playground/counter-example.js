@@ -7,8 +7,23 @@ class Counter extends React.Component
         this.HandlePlusOne = this.HandlePlusOne.bind(this);
         this.HandleReset = this.HandleReset.bind(this);
         this.state = {
-            count: props.count
+            count: 0
         };
+    }
+
+    componentDidMount()
+    {
+        const stringCount = localStorage.getItem('count');
+        const count = parseInt(stringCount, 10);
+        this.setState (() => ({
+            count : count
+        }));
+    }
+
+    componentDidUpdate(preProps, prevState)
+    {
+        if(prevState.count != this.state.count)
+        localStorage.setItem('count', this.state.count);
     }
     
     HandlePlusOne()
@@ -50,11 +65,6 @@ class Counter extends React.Component
         );
     }
 }
-
-Counter.defaultProps = {
-    count : 0
-};
-
 
 ReactDOM.render(<Counter /*count = {10}*/ />, document.getElementById('app'));
 
