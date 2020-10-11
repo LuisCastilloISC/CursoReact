@@ -3,11 +3,20 @@ import AddOpcion from './AddOption';
 import Opcions from './Options'
 import Action from './Action.js';
 import Header from './Header';
+import OptionModal from './OptionModal.js';
 
 class Indecisionapp extends React.Component
 {
     state = {
-        options: []
+        options: [],
+        selectedOption: undefined
+    }
+
+    HandleClearSelectedOption = () =>
+    {
+        this.setState( () => ({
+            selectedOption: undefined
+        }));
     }
 
     HandelReset = () =>
@@ -28,7 +37,9 @@ class Indecisionapp extends React.Component
 
     HandelRandomPick = () =>
     {
-        alert(this.state.options[(Math.floor(Math.random() * this.state.options.length))]);
+         this.setState( () => ({
+            selectedOption: this.state.options[(Math.floor(Math.random() * this.state.options.length))]
+         })) ;
     }
 
     HandleaddOption = (option) =>
@@ -94,9 +105,14 @@ class Indecisionapp extends React.Component
         return (
             <div>
                 <Header title = {title} subtitle = {subtitle} />
-                <Action hasOptions = {this.state.options.length > 0 ? true : false} HandelRandomPick = {this.HandelRandomPick} />
-                <Opcions options = {this.state.options} HandelReset = {this.HandelReset} HandleDeleteOption = {this.HandleDeleteOption}/>
-                <AddOpcion HandleaddOption = {this.HandleaddOption}/>
+                <div className= "container">
+                    <Action hasOptions = {this.state.options.length > 0 ? true : false} HandelRandomPick = {this.HandelRandomPick} />
+                    <div className= "widget">
+                        <Opcions options = {this.state.options} HandelReset = {this.HandelReset} HandleDeleteOption = {this.HandleDeleteOption}/>
+                        <AddOpcion HandleaddOption = {this.HandleaddOption}/>
+                    </div>
+                </div>
+                <OptionModal selectedOption = {this.state.selectedOption} ClearSelectedOption = {this.HandleClearSelectedOption}/>
             </div>
         );
     }
